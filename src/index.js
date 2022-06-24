@@ -18,10 +18,10 @@ root.render(
         <React.StrictMode>
 
             <MainLayout/>
-            {/*<Routes>*/}
-            {/*    <Route exact={true} path={"/"} element={<Auth />}/>*/}
-            {/*    <Route exact={true} path={"/admin"} element={<App/>}/>*/}
-            {/*</Routes>*/}
+            <Routes>
+                <Route exact={true} path={"/"} element={<Auth />}/>
+                <Route exact={true} path={"/admin"} element={<App/>}/>
+            </Routes>
 
         </React.StrictMode>
     </BrowserRouter>
