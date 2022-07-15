@@ -3,39 +3,62 @@ import React, {useEffect, useState} from "react";
 import {Button, Checkbox, Switch} from "antd";
 import "./permission.css";
 import {connect} from "react-redux";
+import {API_BASE_URL} from "../../utils/constants";
+import {
+    getPermissionBySectionId,
+    getSectionList,
+    savePermission
+}
+    from "../../store/reducer/admin";
 
 
-function Permission() {
-    const BASE_URL = "http://localhost:9000/api/v1/user/admin/section";
-    const [sectionList, setSectionList] = useState([]);
+function Permission({
+                        permissionData,
+                        sectionList,
+                        getPermissionBySectionId,
+                        getSectionList,
+                        savePermission,
+                        onActionSuccess
+                    }) {
+    const BASE_URL = `${API_BASE_URL}/user/admin/section`;
+    const [sections, setSections] = useState([]);
     const [data, setData] = useState({content: []});
     const [switchStatus, setSwitchStatus] = useState([]);
     const [newState, setNewState] = useState(false);
 
 
     useEffect(function () {
-        axios.get(`${BASE_URL}/get`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(res => {
-            if (res.data.statusCode === 200) {
-                setSectionList(res.data.data);
-                axios.get(`${BASE_URL}/get/${res.data.data[0].id}`, {
-                    headers:
-                        {Authorization: localStorage.getItem("accessToken")}
-                }).then(res => {
-                    if (res.data.statusCode === 200) {
-                        setData(res.data.data);
-                    }
-                })
-            }
-        });
+        // axios.get(`${BASE_URL}/get`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(res => {
+        //     if (res.data.statusCode === 200) {
+        //         setSections(res.data.data);
+        //         axios.get(`${BASE_URL}/get/${res.data.data[0].id}`, {
+        //             headers:
+        //                 {Authorization: localStorage.getItem("accessToken")}
+        //         }).then(res => {
+        //             if (res.data.statusCode === 200) {
+        //                 setData(res.data.data);
+        //             }
+        //         })
+        //     }
+        // });
+        getSectionList();
+        if (onActionSuccess) {
+            getPermissionBySectionId(sectionList.data[0].id);
+            setData(permissionData.data);
+        }
+
     }, [])
 
     const onChange = (id) => {
-        axios.get(`${BASE_URL}/get/${id}`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(res => {
-            if (res.data.statusCode === 200) {
-                setData({...res.data.data});
-                setNewState(false);
-            }
-        });
+        // axios.get(`${BASE_URL}/get/${id}`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(res => {
+        //     if (res.data.statusCode === 200) {
+        //         setData({...res.data.data});
+        //         setNewState(false);
+        //     }
+        // });
+        getPermissionBySectionId(id);
+        setData(permissionData)
+        setNewState(false);
     }
 
 
@@ -49,12 +72,14 @@ function Permission() {
 
     const saveBtnOnclick = () => {
         switchStatus.forEach((el, i) => data.content[i].permissions.visibility = switchStatus[i]);
-        axios.post(`${BASE_URL}/edit`, data, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(resp => {
-                if (resp.data.statusCode === 200)
-                    console.log('data updated');
-                setNewState(false);
-            }
-        )
+        // axios.post(`${BASE_URL}/edit`, data, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(resp => {
+        //         if (resp.data.statusCode === 200)
+        //             console.log('data updated');
+        //         setNewState(false);
+        //     }
+        // )
+        savePermission(data);
+        setNewState(false);
     }
 
     const handleChange = (ordinal, key) => {
@@ -67,7 +92,7 @@ function Permission() {
         <div>
             <ul className={"nav nav-navbar"}>
                 {
-                    sectionList.map((section) => <ol key={section.id}>
+                    sections.map((section) => <ol key={section.id}>
                             <button className={"btn btn-primary"} onClick={() => onChange(section.id)}>
                                 {section.sectionName}
                             </button>
@@ -127,4 +152,4 @@ function Permission() {
     )
 }
 
-export default connect()(Permission);
+export default Permission;

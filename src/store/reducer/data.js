@@ -16,11 +16,13 @@ const slice = createSlice({
             state.sectionData = data
         },
         onGetDataWithPage: (state, {payload: {data}}) => {
+            console.log("data with page", data)
             state.sectionData = data
             state.pages = data.totalPages
         },
         onFailGettingData: (state, {payload}) => {
             state.sectionData = []
+            toast("Can not get data", {autoClose: 1000})
         },
         onFail: (state, {payload}) => {
             localStorage.setItem('access-token', '')

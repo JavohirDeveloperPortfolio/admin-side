@@ -3,13 +3,14 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Co
 import axios from "axios";
 import {DatePicker, Select, Space} from "antd";
 import {Option} from "antd/es/mentions";
+import {API_BASE_URL} from "../../utils/constants";
 
 const GroupAddModal = ({ toggle, getSectionData}) => {
 
 
     const [groupData, setGroupData] = useState({});
     const [courseList, setCourseList] = useState();
-    const BASE_URL ='http://localhost:9000/api/v1/course';
+    const BASE_URL =`${API_BASE_URL}/course`;
 
     function handleSubmit() {
         axios.post(`${BASE_URL}/group/add`, groupData, {headers: {Authorization: localStorage.getItem("accessToken")}}).then((res) => {
@@ -24,7 +25,7 @@ const GroupAddModal = ({ toggle, getSectionData}) => {
 
     useEffect(() => {
         console.log(`${BASE_URL}/list?size=500`)
-        axios.get(`http://localhost:9000/api/v1/user/admin/section/data?id=4`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then((res) => {
+        axios.get(`${API_BASE_URL}/user/admin/section/data?id=4`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then((res) => {
             console.log(res.data)
             if (res.data.success) {
                 setCourseList(res.data.data.body.content);
