@@ -36,6 +36,7 @@ function Main({
     const [currentSectionName, setCurrentSectionName] = useState("");
     const [collapsed, setCollapsed] = useState(false);
     const [idForActiveMenu, setId] = useState(0);
+    let courseId = 0;
 
 
     const handleClick = (menu) => {
@@ -81,6 +82,7 @@ function Main({
             getDataWithPage(menuList[0].id, currentPage)
             setCurrentSectionName(menuList[0].sectionName)
         }
+        courseId = menuList.filter(section => section.sectionName.toLowerCase() === "course").map(section => section.id);
     }, [menuList])
 
 
@@ -150,7 +152,7 @@ function Main({
                             </div>
                             {courseModalOpen ? <CourseAddModal toggle={toggle} addCourse={addCourse}
                                                                getSectionData={getSectionData}/> : ""}
-                            {groupModalOpen ? <GroupAddModal toggle={toggle} getSectionData={getSectionData}/> : ""}
+                            {groupModalOpen ? <GroupAddModal toggle={toggle} getDataWithPage={getDataWithPage} getSectionData={getSectionData} courseId={courseId}/> : ""}
                         </div>
                     </div>
                 </Content>

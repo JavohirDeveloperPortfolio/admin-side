@@ -5,7 +5,7 @@ import {DatePicker, Select, Space} from "antd";
 import {Option} from "antd/es/mentions";
 import {API_BASE_URL} from "../../utils/constants";
 
-const GroupAddModal = ({ toggle, getSectionData}) => {
+const GroupAddModal = ({ toggle, getDataWithPage, courseId}) => {
 
 
     const [groupData, setGroupData] = useState({});
@@ -24,8 +24,8 @@ const GroupAddModal = ({ toggle, getSectionData}) => {
     }
 
     useEffect(() => {
-        console.log(`${BASE_URL}/list?size=500`)
-        axios.get(`${API_BASE_URL}/user/admin/section/data?id=4`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then((res) => {
+        // console.log(`${BASE_URL}/list?size=500`)
+        axios.get(`${API_BASE_URL}/user/admin/section/data?id=${courseId}`, {headers: {Authorization: localStorage.getItem("access-token")}}).then((res) => {
             console.log(res.data)
             if (res.data.success) {
                 setCourseList(res.data.data.body.content);
