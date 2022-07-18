@@ -22,7 +22,7 @@ const slice = createSlice({
         },
         onFailGettingData: (state, {payload}) => {
             state.sectionData = []
-            toast("Can not get data", {autoClose: 1000})
+            toast.error("Can not get data", {autoClose: 1000})
         },
         onFail: (state, {payload}) => {
             localStorage.setItem('access-token', '')

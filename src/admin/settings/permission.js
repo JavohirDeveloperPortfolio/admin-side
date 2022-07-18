@@ -4,21 +4,11 @@ import {Button, Checkbox, Switch} from "antd";
 import "./permission.css";
 import {connect} from "react-redux";
 import {API_BASE_URL} from "../../utils/constants";
-import {
-    getPermissionBySectionId,
-    getSectionList,
-    savePermission
-}
-    from "../../store/reducer/admin";
+import {toast} from "react-toastify";
 
 
 function Permission({
-                        permissionData,
-                        sectionList,
-                        getPermissionBySectionId,
-                        getSectionList,
                         savePermission,
-                        onActionSuccess
                     }) {
     const BASE_URL = `${API_BASE_URL}/user/admin/section`;
     const [sections, setSections] = useState([]);
@@ -28,63 +18,71 @@ function Permission({
 
 
     useEffect(function () {
-        // axios.get(`${BASE_URL}/get`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(res => {
-        //     if (res.data.statusCode === 200) {
-        //         setSections(res.data.data);
-        //         axios.get(`${BASE_URL}/get/${res.data.data[0].id}`, {
-        //             headers:
-        //                 {Authorization: localStorage.getItem("accessToken")}
-        //         }).then(res => {
-        //             if (res.data.statusCode === 200) {
-        //                 setData(res.data.data);
-        //             }
-        //         })
-        //     }
-        // });
-        getSectionList();
-        if (onActionSuccess) {
-            getPermissionBySectionId(sectionList.data[0].id);
-            setData(permissionData.data);
-        }
+        axios.get(`${BASE_URL}/get`, {headers: {Authorization: localStorage.getItem("access-token")}}).then(res => {
+            if (res.data.statusCode === 200) {
+                setSections(res.data.data);
+                axios.get(`${BASE_URL}/get/${res.data.data[0].id}`, {
+                    headers:
+                        {Authorization: localStorage.getItem("access-token")}
+                }).then(res => {
+                    if (res.data.statusCode === 200) {
+                        setData(res.data.data);
+                    }
+                })
+            }
+        });
 
     }, [])
 
     const onChange = (id) => {
-        // axios.get(`${BASE_URL}/get/${id}`, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(res => {
-        //     if (res.data.statusCode === 200) {
-        //         setData({...res.data.data});
-        //         setNewState(false);
-        //     }
-        // });
-        getPermissionBySectionId(id);
-        setData(permissionData)
-        setNewState(false);
+        axios.get(`${BASE_URL}/get/${id}`, {headers: {Authorization: localStorage.getItem("access-token")}}).then(res => {
+            console.log("id", id, " data", res);
+            if (res.data.success) {
+                const content = res.data.data;
+                console.log("content", content);
+                console.log("...", {...content})
+                setData({...content});
+                setNewState(false);
+            }
+        });
     }
 
 
     const switchBtnOnChange = (id, i) => {
         switchStatus[id] = !switchStatus[id];
         setSwitchStatus([...switchStatus]);
+        console.log("switchStatus on change", switchStatus);
         data.content[i].permissions.visibility = !data.content[i].permissions.visibility;
         setData({...data});
         setNewState(true);
     }
 
     const saveBtnOnclick = () => {
-        switchStatus.forEach((el, i) => data.content[i].permissions.visibility = switchStatus[i]);
-        // axios.post(`${BASE_URL}/edit`, data, {headers: {Authorization: localStorage.getItem("accessToken")}}).then(resp => {
-        //         if (resp.data.statusCode === 200)
-        //             console.log('data updated');
-        //         setNewState(false);
-        //     }
-        // )
-        savePermission(data);
+        // console.log("switchStatus", switchStatus)
+        // switchStatus.forEach((el, i) => data.content[i].permissions.visibility = switchStatus[i]);
+        // console.log("data", data)
         setNewState(false);
+        axios.post(`${BASE_URL}/edit`, data, {headers: {Authorization: localStorage.getItem("access-token")}}).then(resp => {
+                console.log("response", resp)
+                if (resp.status === 200) {
+                    toast.success("Permissions updated successfully", {autoClose: 1000})
+                }
+                else {
+                    throw new Error("Permissions update failed");
+                }
+            }
+        ).catch((err) => {toast.error(err.message, {autoClose: 1000})})
     }
 
     const handleChange = (ordinal, key) => {
-        data.content[ordinal].permissions[key] = !data.content[ordinal].permissions[key];
+        console.log("ordinal", ordinal)
+        console.log("data", data)
+        data.content[ordinal - 1].permissions[key] = !data.content[ordinal - 1].permissions[key];
     }
+
+    useEffect(()=>{
+
+    }, [data])
 
 
     return (
@@ -117,26 +115,26 @@ function Permission({
                             <td>
                                 <Switch
                                     defaultChecked={newState && perm.permissions.visibility} onClick={() => {
-                                    switchBtnOnChange(perm.ordinal, i)
+                                    switchBtnOnChange(perm.ordinal - 1, i)
                                 }}/>
                             </td>
                             <td>
                                 <Checkbox
-                                    disabled={!switchStatus[perm.ordinal]}
+                                    disabled={!switchStatus[perm.ordinal - 1]}
                                     defaultChecked={perm.permissions.update} onClick={() => {
                                     handleChange(perm.ordinal, "update")
                                 }}/>
                             </td>
                             <td>
                                 <Checkbox
-                                    disabled={!switchStatus[perm.ordinal]}
+                                    disabled={!switchStatus[perm.ordinal - 1]}
                                     defaultChecked={perm.permissions.delete} onChange={() => {
                                     handleChange(perm.ordinal, "delete")
                                 }}/>
                             </td>
                             <td>
                                 <Checkbox
-                                    disabled={!switchStatus[perm.ordinal]}
+                                    disabled={!switchStatus[perm.ordinal - 1]}
                                     defaultChecked={perm.permissions.info} onChange={() => {
                                     handleChange(perm.ordinal, "info")
                                 }}/>

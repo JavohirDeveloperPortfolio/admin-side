@@ -1,5 +1,6 @@
 import axios from "axios";
 import {apiCall} from "../action/api";
+import {API_BASE_URL} from "../../utils/constants";
 
 
 const api = ({dispatch}) => (next) => (action) => {
@@ -11,7 +12,7 @@ const api = ({dispatch}) => (next) => (action) => {
     const {url, method, onSuccess, onFail, data, headers} = action.payload
 
     axios({
-        baseURL: 'http://10.10.1.18:8080/api/v1',
+        baseURL: API_BASE_URL,
         url,
         method,
         headers,
