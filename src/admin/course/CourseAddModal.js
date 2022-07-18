@@ -10,6 +10,7 @@ const CourseAddModal = ({toggle, addCourse}) => {
         if (courseData.name && courseData.price && courseData.description && courseData.duration) {
             addCourse(courseData)
         } else toast.warn('You need to fill all blanks', {autoClose: 1500})
+        toggle("course")
     }
 
     function clearInput() {

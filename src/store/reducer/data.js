@@ -18,7 +18,7 @@ const slice = createSlice({
         onGetDataWithPage: (state, {payload: {data}}) => {
             console.log("data with page", data)
             state.sectionData = data
-            state.pages = data.totalPages
+            state.pages = data.body.totalPages
         },
         onFailGettingData: (state, {payload}) => {
             state.sectionData = []
