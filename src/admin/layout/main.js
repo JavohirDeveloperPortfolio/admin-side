@@ -45,6 +45,7 @@ function Main({
         if (menu.sectionName === 'permission')
             return;
         getDataWithPage(menu.id, currentPage)
+        setCurrentPage(0)
     }
 
     function getSectionData(hasNext) {
@@ -152,7 +153,7 @@ function Main({
                             </div>
                             {courseModalOpen ? <CourseAddModal toggle={toggle} addCourse={addCourse}
                                                                getSectionData={getSectionData}/> : ""}
-                            {groupModalOpen ? <GroupAddModal toggle={toggle} getDataWithPage={getDataWithPage} getSectionData={getSectionData} courseId={courseId}/> : ""}
+                            {groupModalOpen ? <GroupAddModal toggle={toggle} getSectionData={getSectionData} courseId={courseId}/> : ""}
                         </div>
                     </div>
                 </Content>

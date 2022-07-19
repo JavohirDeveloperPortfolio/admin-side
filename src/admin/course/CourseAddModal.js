@@ -3,12 +3,13 @@ import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Co
 import {toast} from "react-toastify";
 
 
-const CourseAddModal = ({toggle, addCourse}) => {
+const CourseAddModal = ({toggle, addCourse, getSectionData}) => {
     const [courseData, setCourseData] = useState({});
 
     function handleSubmit() {
         if (courseData.name && courseData.price && courseData.description && courseData.duration) {
             addCourse(courseData)
+            getSectionData(0)
         } else toast.warn('You need to fill all blanks', {autoClose: 1500})
         toggle("course")
     }

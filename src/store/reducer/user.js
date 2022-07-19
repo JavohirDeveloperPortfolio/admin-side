@@ -17,19 +17,20 @@ const slice = createSlice({
         },
 
         onGetMe: (state, {payload}) => {
+            console.log("user getme", payload)
             state.crtUser.id = payload
             state.authorization = true
         },
         onFail: (state, {payload: {data: {message}}}) => {
             state.authorization = false
-            localStorage.setItem('access-token', '')
-            localStorage.setItem('refresh-token', '')
+            localStorage.removeItem('access-token')
+            localStorage.removeItem('refresh-token')
             toast.error(message, {autoClose: 1500})
         },
         onFailGetMe: (state, {payload}) => {
             state.authorization = false
-            localStorage.setItem('access-token', '')
-            localStorage.setItem('refresh-token', '')
+            localStorage.removeItem('access-token')
+            localStorage.removeItem('refresh-token')
         },
     }
 })

@@ -25,9 +25,9 @@ const slice = createSlice({
             toast.error("Can not get data", {autoClose: 1000})
         },
         onFail: (state, {payload}) => {
-            localStorage.setItem('access-token', '')
-            localStorage.setItem('refresh-token', '')
-            state.isNotAuthorization = true
+            // localStorage.setItem('access-token', '')
+            // localStorage.setItem('refresh-token', '')
+            // state.isNotAuthorization = true
             state.sectionData = []
         },
 

@@ -5,7 +5,7 @@ import {DatePicker, Select, Space} from "antd";
 import {Option} from "antd/es/mentions";
 import {API_BASE_URL} from "../../utils/constants";
 
-const GroupAddModal = ({ toggle, getDataWithPage, courseId}) => {
+const GroupAddModal = ({ toggle, getSectionData}) => {
 
 
     const [groupData, setGroupData] = useState({});
@@ -13,7 +13,7 @@ const GroupAddModal = ({ toggle, getDataWithPage, courseId}) => {
     const BASE_URL =`${API_BASE_URL}/course`;
 
     function handleSubmit() {
-        axios.post(`${BASE_URL}/group/add`, groupData, {headers: {Authorization: localStorage.getItem("accessToken")}}).then((res) => {
+        axios.post(`${BASE_URL}/group/add`, groupData, {headers: {Authorization: localStorage.getItem("access-token")}}).then((res) => {
             console.log(res)
             toggle("group")
             clearInput()
@@ -24,6 +24,7 @@ const GroupAddModal = ({ toggle, getDataWithPage, courseId}) => {
     }
 
     useEffect(() => {
+        console.log("course id", courseId)
         // console.log(`${BASE_URL}/list?size=500`)
         axios.get(`${API_BASE_URL}/user/admin/section/data?id=${courseId}`, {headers: {Authorization: localStorage.getItem("access-token")}}).then((res) => {
             console.log(res.data)
@@ -117,7 +118,7 @@ const GroupAddModal = ({ toggle, getDataWithPage, courseId}) => {
 
                         <Col sm={{size: 8, offset: 8}}>
                             <Button color="secondary" onClick={() => {
-                                toggle();
+                                toggle("group")
                                 clearInput()
                             }}>Cancel</Button>
                             <Button color={"danger"} className={"float-right mx-1"}
