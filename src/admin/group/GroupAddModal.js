@@ -84,8 +84,7 @@ const GroupAddModal = ({ toggle, getSectionData, courseId}) => {
                         <FormGroup>
                             <Label for="type">Gender: </Label>
                                 <Select
-                                    defaultValue="MALE"
-                                    key={"MALE"}
+                                    defaultValue="SELECT GENDER"a
                                     style={{
                                         width: 120,
                                     }}
