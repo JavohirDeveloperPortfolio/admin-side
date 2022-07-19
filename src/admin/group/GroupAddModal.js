@@ -13,14 +13,15 @@ const GroupAddModal = ({ toggle, getSectionData, courseId}) => {
     const BASE_URL =`${API_BASE_URL}/course`;
 
     function handleSubmit() {
-        axios.post(`${BASE_URL}/group/add`, groupData, {headers: {Authorization: localStorage.getItem("access-token")}}).then((res) => {
+        console.log(groupData)
+        axios.post(`${API_BASE_URL}/group/add`, groupData, {headers: {Authorization: localStorage.getItem("access-token")}}).then((res) => {
             console.log(res)
-            toggle("group")
             clearInput()
             getSectionData(0)
         }).catch((err) => {
             console.log(err)
         })
+        toggle("group")
     }
 
     useEffect(() => {
@@ -84,6 +85,7 @@ const GroupAddModal = ({ toggle, getSectionData, courseId}) => {
                             <Label for="type">Gender: </Label>
                                 <Select
                                     defaultValue="MALE"
+                                    key={"MALE"}
                                     style={{
                                         width: 120,
                                     }}
