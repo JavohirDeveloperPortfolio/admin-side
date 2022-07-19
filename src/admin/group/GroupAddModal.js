@@ -5,7 +5,7 @@ import {DatePicker, Select, Space} from "antd";
 import {Option} from "antd/es/mentions";
 import {API_BASE_URL} from "../../utils/constants";
 
-const GroupAddModal = ({ toggle, getSectionData}) => {
+const GroupAddModal = ({ toggle, getSectionData, courseId}) => {
 
 
     const [groupData, setGroupData] = useState({});

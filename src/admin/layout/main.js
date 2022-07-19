@@ -36,7 +36,7 @@ function Main({
     const [currentSectionName, setCurrentSectionName] = useState("");
     const [collapsed, setCollapsed] = useState(false);
     const [idForActiveMenu, setId] = useState(0);
-    let courseId = 0;
+    const [courseId, setCourseId] = useState();
 
 
     const handleClick = (menu) => {
@@ -83,7 +83,12 @@ function Main({
             getDataWithPage(menuList[0].id, currentPage)
             setCurrentSectionName(menuList[0].sectionName)
         }
-        courseId = menuList.filter(section => section.sectionName.toLowerCase() === "course").map(section => section.id);
+        menuList.forEach(section => {
+            if(section.sectionName.toLowerCase() === "course"){
+                setCourseId(section.id)
+            }
+        })
+        console.log(courseId);
     }, [menuList])
 
 
