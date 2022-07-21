@@ -40,7 +40,7 @@ const GroupAddModal = ({ toggle, getSectionData, courseId}) => {
     }
 
     function handleSelect(value){
-        groupData.type = value;
+        groupData.gender = value;
         setGroupData({...groupData});
     }
 
