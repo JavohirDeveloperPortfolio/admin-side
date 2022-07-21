@@ -36,7 +36,7 @@ const SectionTable = ({data, getSectionData, onSearch, toggleUpdate, deleteSecti
                 </tr>
                 </thead>
                 <tbody>
-                {body ? body.content.map(elm => {
+                {body && body.content ? body.content.map(elm => {
                     return <tr key={elm.id}>
                         {data.headers.map(head => <td>{elm[head]}</td>)}
                         {

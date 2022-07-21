@@ -4,18 +4,31 @@ import React from 'react';
 import {Button, Col, Card, Row, CardHeader, CardTitle, CardBody, CardText, CardColumns, CardDeck} from "reactstrap";
 import Search from "antd/es/input/Search";
 import {useState} from "react";
+import {getGroupContent} from "../../store/reducer/data";
+import {connect} from "react-redux";
+import {useNavigate} from "react-router";
 
-const {Meta} = Card;
 
-const Groups = ({data, getSectionData, onSearch, toggleUpdate, deleteSectionItem, toggle, sectionName}) => {
+function Groups({data, getSectionData, onSearch, toggleUpdate, deleteSectionItem, toggle, sectionName, groupContent, getGroupContent}) {
 
     console.log("group data", data)
     const {update, headers, info, body} = data
     const [search, setSearch] = useState("")
+    const navigate = useNavigate();
 
-    function convertDate(timestamp){
+    function convertDate(timestamp) {
         const date = new Date(timestamp);
         return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay()
+    }
+
+    function deleteGroupUser(userId, groupId){
+        alert(`user: ${userId} group: ${groupId}`)
+    }
+
+    function handleGroupContent(groupId) {
+        navigate("/dashboard/group-content", {state: {groupId: groupId}})
+        getGroupContent(groupId);
+        return <groupContent data={groupContent} onSearch={onSearch} toggleUpdate={toggleUpdate} deleteGroupUser={deleteGroupUser}/>
     }
 
     return (
@@ -38,56 +51,26 @@ const Groups = ({data, getSectionData, onSearch, toggleUpdate, deleteSectionItem
                     <Search placeholder="Search..." onSearch={onSearch} enterButton/>
                 </Col>
             </Row>
-            {/*// <Row gutter={16}>*/}
-            {/*//     {body.content.map(content => {*/}
-            {/*//         return (*/}
-            {/*//             <Col>*/}
-            {/*//                 <Card*/}
-            {/*//                     style={{*/}
-            {/*//                         width: 300,*/}
-            {/*//                     }}*/}
-            {/*//                     cover={*/}
-            {/*//                         <img*/}
-            {/*//                             alt="example"*/}
-            {/*//                             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"*/}
-            {/*//                         />*/}
-            {/*//                     }*/}
-            {/*//                     actions={[*/}
-            {/*//                         <SettingOutlined key="setting"/>,*/}
-            {/*//                         <EditOutlined key="edit"/>,*/}
-            {/*//                         <EllipsisOutlined key="ellipsis"/>,*/}
-            {/*//                     ]}*/}
-            {/*//                 >*/}
-            {/*                    <Meta*/}
-            {/*                        avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}*/}
-            {/*                        title="Card title"*/}
-            {/*                        description={content.name}*/}
-            {/*                    />*/}
-            {/*                </Card>*/}
-            {/*            </Col>*/}
-            {/*        )*/}
-            {/*    })}*/}
-            {/*</Row>*/}
             <Row lg={4}>
-                {body.content.map(content => {
+                {body && body.content ? body.content.map(content => {
                     return (
                         <Col sm="6">
                             <Card
-                                onClick={() => alert("Hello world")}
+                                onClick={() => handleGroupContent(content.id)}
                                 className="my-2"
                                 color="primary"
                                 outline
                                 style={{
                                     width: '14rem',
-                                    cursor:'pointer'
+                                    cursor: 'pointer'
                                 }}
                             >
                                 <CardHeader>
-                                    Group:  {content.name}
+                                    Group: {content.name}
                                 </CardHeader>
                                 <CardBody>
                                     <CardTitle tag="h5">
-                                        Gender:  {content.gender}
+                                        Gender: {content.gender}
                                     </CardTitle>
                                     <CardText>
                                         Starts at: {convertDate(content.startDate)}
@@ -97,12 +80,12 @@ const Groups = ({data, getSectionData, onSearch, toggleUpdate, deleteSectionItem
                                     </CardText>
                                 </CardBody>
                             </Card>
-                         </Col>
+                        </Col>
                     )
-                })
+                }) : ''
                 }
             </Row>
         </div>)
 }
 
-export default Groups;
+export default connect(({data: {groupContent}}) => ({groupContent}), {getGroupContent})(Groups);

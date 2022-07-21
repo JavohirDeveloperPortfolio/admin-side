@@ -2,20 +2,21 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 import {Button, Checkbox, Switch} from "antd";
 import "./permission.css";
-import {connect} from "react-redux";
 import {API_BASE_URL} from "../../utils/constants";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router";
 
 
 function Permission({
-                        savePermission,
+                        menuList
                     }) {
     const BASE_URL = `${API_BASE_URL}/user/admin/section`;
     const [sections, setSections] = useState([]);
     const [data, setData] = useState({content: []});
     const [switchStatus, setSwitchStatus] = useState([]);
     const [newState, setNewState] = useState(false);
-
+    const [currentSection, setCurrentSection] = useState(menuList[0].sectionName)
+    const navigate = useNavigate();
 
     useEffect(function () {
         axios.get(`${BASE_URL}/get`, {headers: {Authorization: localStorage.getItem("access-token")}}).then(res => {
@@ -44,7 +45,12 @@ function Permission({
                 setData({...content});
                 setNewState(false);
             }
-        });
+            else throw Error("Permission denied")
+        }).catch(err => {
+            toast.error(err.message, {autoClose: 1000})
+            navigate("/")
+        })
+            setCurrentSection(menuList.filter(menu => menu.id === id).map(menu => menu.sectionName)[0])
     }
 
 
@@ -91,7 +97,7 @@ function Permission({
             <ul className={"nav nav-navbar"}>
                 {
                     sections.map((section) => <ol key={section.id}>
-                            <button className={"btn btn-primary"} onClick={() => onChange(section.id)}>
+                            <button className={currentSection && currentSection === section.sectionName ? 'p-2 pb-2 rounded bg-primary my-1 border-primary' : 'p-2 pb-2 rounded my-1 border-primary'} onClick={() => onChange(section.id)}>
                                 {section.sectionName}
                             </button>
                         </ol>

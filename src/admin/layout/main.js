@@ -18,6 +18,7 @@ import {CardMedia} from "@mui/material";
 import Group from "../group/groups";
 import {sections} from "../../utils/constants/section_type";
 import Groups from "../group/groups";
+import {toast} from "react-toastify";
 
 const {Header, Content, Sider} = Layout;
 
@@ -25,6 +26,7 @@ function Main({
                   menuList,
                   pages,
                   isNotAuthorization,
+                  authorization,
                   sectionData,
                   getDataWithPage,
                   getMenuList,
@@ -73,11 +75,13 @@ function Main({
         getMenuList()
     }, [])
 
-    // useEffect(() => {
-    //     if (isNotAuthorization)
-    //         navigate('/')
-    //     getMenuList()
-    // }, [isNotAuthorization])
+    useEffect(() => {
+        if (isNotAuthorization || authorization) {
+            toast.error("You should login again", {autoClose: 1000})
+            navigate('/')
+        }
+        getMenuList()
+    }, [authorization])
 
 
     useEffect(() => {
@@ -139,16 +143,17 @@ function Main({
                 />
                 <Content>
                     {
-                        currentSectionName === sections.PERMISSION.name_lower ? <Permission/> :
-                            sectionData && currentSectionName === sections.GROUP.name_lower ?
+                        currentSectionName.toLowerCase() === sections.PERMISSION.name_lower ?
+                            <Permission menuList={menuList}/> :
+                            sectionData && currentSectionName.toLowerCase() === sections.GROUP.name_lower ?
                                 <Groups data={sectionData}
                                         getSectionData={getSectionData}
                                         toggle={toggle}
                                         sectionName={currentSectionName}
                                 /> : sectionData && <SectionTable data={sectionData}
-                                                                                         getSectionData={getSectionData}
-                                                                                         toggle={toggle}
-                                                                                         sectionName={currentSectionName ? currentSectionName : menuList[0] ? menuList[0].sectionName : ''}
+                                                                  getSectionData={getSectionData}
+                                                                  toggle={toggle}
+                                                                  sectionName={currentSectionName ? currentSectionName : menuList[0] ? menuList[0].sectionName : ''}
                             />
                     }
                     <div className="row m-3">
@@ -175,7 +180,7 @@ function Main({
     );
 }
 
-export default connect(({data: {sectionData, menuList, pages, isNotAuthorization}}) => ({
+export default connect(({data: {sectionData, menuList, pages, isNotAuthorization}, user: {authorization}}) => ({
         sectionData,
         menuList,
         pages,

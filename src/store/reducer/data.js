@@ -1,18 +1,21 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {apiCall} from "../action/api";
 import {toast} from 'react-toastify';
+import {useNavigate} from "react-router";
 
 
-const initialState = {sectionData: [], pages: 0, menuList: [], isNotAuthorization: false}
+const initialState = {sectionData: [], pages: 0, menuList: [], isNotAuthorization: false, groupContent:{}}
 
 const slice = createSlice({
     name: 'data',
     initialState,
     reducers: {
         onGetMenuList: (state, {payload}) => {
+            console.log("menu list", payload)
             state.menuList = payload
         },
         onGetData: (state, {payload: {data}}) => {
+            console.log("section data", data)
             state.sectionData = data
         },
         onGetDataWithPage: (state, {payload: {data}}) => {
@@ -25,15 +28,21 @@ const slice = createSlice({
             toast.error("Can not get data", {autoClose: 1000})
         },
         onFail: (state, {payload}) => {
-            // localStorage.setItem('access-token', '')
-            // localStorage.setItem('refresh-token', '')
-            // state.isNotAuthorization = true
+            if(payload.status === 401){
+                localStorage.removeItem('access-token')
+                state.isNotAuthorization = true
+            }
             state.sectionData = []
         },
 
         onAddingData: (state, {payload: {data, message}}) => {
             toast.success(message, {autoClose: 1000})
             state.sectionData.unshift(data)
+        },
+
+        onGetGroupContent: (state, {payload: {data}}) => {
+            console.log("group contetn", data)
+            state.groupContent = data
         }
 
     }
@@ -55,6 +64,15 @@ export const getDataWithPage = (id, page) => apiCall({
     onFail: slice.actions.onFailGettingData.type,
     headers: {Authorization: localStorage.getItem("access-token")}
 });
+
+export const getGroupContent = (id) => apiCall({
+    url: `/group/get/${id}`,
+    method: 'GET',
+    onSuccess: slice.actions.onGetGroupContent.type,
+    onFail: slice.actions.onFailGettingData.type,
+    headers: {Authorization: localStorage.getItem("access-token")}
+});
+
 export const addCourse = (data) => apiCall({
     url: '/course/add',
     method: 'POST',
