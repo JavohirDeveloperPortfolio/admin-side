@@ -3,7 +3,7 @@ import {apiCall} from "../action/api";
 import {toast} from 'react-toastify';
 
 
-const initialState = {user: {}, authorization: false, crtUser: {}}
+const initialState = {user: {}, authorization: false, crtUser: {}, userDetails: {}}
 
 const slice = createSlice({
     name: 'user',
@@ -32,6 +32,9 @@ const slice = createSlice({
             localStorage.removeItem('access-token')
             localStorage.removeItem('refresh-token')
         },
+        onGetUserDetails: (state, {payload: {data}}) => {
+            state.userDetails = data
+        }
     }
 })
 
@@ -43,6 +46,7 @@ export const login = (data) => apiCall({
     onFail: slice.actions.onFail.type,
     data
 });
+
 export const getMe = () => apiCall({
     url: 'user/auth/getMe',
     method: 'GET',
@@ -50,6 +54,14 @@ export const getMe = () => apiCall({
     onFail: slice.actions.onFailGetMe.type,
     headers: {Authorization: localStorage.getItem("access-token")}
 });
+
+export const getUserDetails = (id) => apiCall({
+    url: `/group/user_details/${id}`,
+    method: 'GET',
+    onSuccess: slice.actions.onGetUserDetails.type,
+    onFail: slice.actions.onFail.type,
+    headers: {Authorization: localStorage.getItem("access-token")}
+})
 
 
 export default slice.reducer

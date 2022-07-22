@@ -4,12 +4,15 @@ import Search from "antd/es/input/Search";
 import {getGroupContent} from "../../store/reducer/data";
 import {connect} from "react-redux";
 import {useLocation} from "react-router";
+import GroupUserDetailsModal from "./GroupUserDetailsModal";
+import {getUserDetails} from "../../store/reducer/user";
 
-const GroupContent = ({groupContent, getGroupContent}) => {
+const GroupContent = ({groupContent, getGroupContent, userDetails, getUserDetails}) => {
 
     const {update, headers, info, body} = groupContent
     const {state} = useLocation();
     const [search, setSearch] = useState("")
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         getGroupContent(state.groupId)
@@ -21,6 +24,11 @@ const GroupContent = ({groupContent, getGroupContent}) => {
 
     function deleteGroupUser(id){
 
+    }
+
+    function toggleInfo(id){
+        getUserDetails(id);
+        setOpen(!open)
     }
 
 
@@ -62,7 +70,7 @@ const GroupContent = ({groupContent, getGroupContent}) => {
                         {
                            <td>
                                 {
-                                    <Button color="secondary" className="m-1" onClick={() => toggleUpdate(elm.id)}>
+                                    <Button color="secondary" className="m-1" onClick={() => toggleInfo(elm.id)}>
                                         &#10066;
                                     </Button>
                                 }
@@ -77,8 +85,9 @@ const GroupContent = ({groupContent, getGroupContent}) => {
                 }) : ''}
                 </tbody>
             </table>
+            {open ? <GroupUserDetailsModal toggleInfo={toggleInfo} userDetails={userDetails}/> : ''}
         </div>
     );
 }
 
-export default connect(({data: {groupContent}}) => ({groupContent}), {getGroupContent}) (GroupContent);
+export default connect(({data: {groupContent}, user: {userDetails}}) => ({groupContent, userDetails}), {getGroupContent, getUserDetails}) (GroupContent);
