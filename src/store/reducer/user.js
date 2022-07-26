@@ -3,7 +3,7 @@ import {apiCall} from "../action/api";
 import {toast} from 'react-toastify';
 
 
-const initialState = {user: {}, authorization: false, crtUser: {}}
+const initialState = {user: {}, crtUser:null,authorization:false}
 
 const slice = createSlice({
     name: 'user',
@@ -17,19 +17,18 @@ const slice = createSlice({
         },
 
         onGetMe: (state, {payload}) => {
-            state.crtUser.id = payload
-            state.authorization = true
+            state.crtUser = payload
+            state.authorization=true;
         },
         onFail: (state, {payload: {data: {message}}}) => {
-            state.authorization = false
-            localStorage.setItem('access-token', '')
-            localStorage.setItem('refresh-token', '')
+            localStorage.removeItem('access-token')
+            localStorage.removeItem('refresh-token')
             toast.error(message, {autoClose: 1500})
         },
         onFailGetMe: (state, {payload}) => {
-            state.authorization = false
-            localStorage.setItem('access-token', '')
-            localStorage.setItem('refresh-token', '')
+            state.authorization=false
+            localStorage.removeItem('access-token')
+            localStorage.removeItem('refresh-token')
         },
     }
 })

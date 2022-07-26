@@ -3,7 +3,6 @@ import {useNavigate} from "react-router";
 import {connect} from "react-redux";
 import {toast} from "react-toastify";
 import {login, getMe} from "../../store/reducer/user";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import bgImage from '../../utils/img/bg-login2.jpg'
 import logo from '../../utils/img/logo.png'
 
@@ -11,7 +10,6 @@ import {
     Avatar,
     Box,
     Button, CardMedia, Checkbox,
-    Container,
     createTheme,
     CssBaseline, FormControlLabel, Grid, Link, Paper,
     TextField,
@@ -23,7 +21,7 @@ const theme = createTheme();
 
 
 
-function Auth({authorization, login, getMe}) {
+function Auth({crtUser,authorization, login, getMe}) {
     let navigate = useNavigate();
 
 
@@ -31,6 +29,11 @@ function Auth({authorization, login, getMe}) {
         getMe()
     }, [])
 
+
+    useEffect(() => {
+        if (crtUser)
+            navigate('/dashboard')
+    }, [crtUser])
 
     useEffect(() => {
         if (authorization)
@@ -135,5 +138,5 @@ function Auth({authorization, login, getMe}) {
 
 
 
-export default connect(({user: {authorization}}) => ({authorization}),
+export default connect(({user: {crtUser,authorization}}) => ({crtUser,authorization}),
     {login, getMe})(Auth);
