@@ -32,11 +32,11 @@ const SectionTable = ({data, getSectionData, onSearch, toggleUpdate, deleteSecti
             <table className={"table mt-4 table-bordered table-hover table-striped"}>
                 <thead>
                 <tr>
-                    {headers ? headers.map(head => <th key={head}>{head}</th>) : ''}
+                    {headers && headers.map(head => <th key={head}>{head}</th>)}
                 </tr>
                 </thead>
                 <tbody>
-                {body ? body.content.map(elm => {
+                {body && body.content.map(elm => {
                     return <tr key={elm.id}>
                         {data.headers.map(head => <td>{elm[head]}</td>)}
                         {
@@ -59,7 +59,7 @@ const SectionTable = ({data, getSectionData, onSearch, toggleUpdate, deleteSecti
                             </td>
                         }
                     </tr>
-                }) : ''}
+                })}
                 </tbody>
             </table>
         </div>

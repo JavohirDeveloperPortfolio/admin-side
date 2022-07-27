@@ -14,6 +14,7 @@ import {
     getMenuList,
     getDataWithPage,
     addCourse,
+    deleteSectionItem,
 } from "../../store/reducer/data";
 import {CardMedia} from "@mui/material";
 
@@ -27,7 +28,8 @@ function Main({
                   getDataWithPage,
                   getMenuList,
                   addCourse,
-                  getMe
+                  getMe,
+                  deleteSectionItem
               }) {
 
     const navigate = useNavigate()
@@ -63,6 +65,10 @@ function Main({
             setGroupModalOpen(!groupModalOpen)
         }
 
+    }
+
+    function deleteSectionItemById(item_id){
+        deleteSectionItem(currentSectionName,item_id)
     }
 
 
@@ -114,7 +120,7 @@ function Main({
                 </div>
                 <ul className='p-4'>
                     {
-                        menuList ? menuList
+                        menuList && menuList
                             .map(menu => <li
                                     className={currentSectionName && currentSectionName === menu.sectionName ? 'p-2 pb-5 rounded bg-primary my-1' : 'p-2 pb-5 rounded my-1'}
                                     key={'menu' + menu.id}
@@ -122,7 +128,7 @@ function Main({
                                     onClick={() => handleClick(menu)}>
                                     {collapsed ? menu.sectionName.toUpperCase().substring(0, 1) : menu.sectionName.toUpperCase()}
                                 </li>
-                            ) : ''}
+                            )}
                 </ul>
             </Sider>
             <Layout className="site-layout">
@@ -138,6 +144,7 @@ function Main({
                             sectionData && <SectionTable data={sectionData}
                                                          getSectionData={getSectionData}
                                                          toggle={toggle}
+                                                         deleteSectionItem={deleteSectionItemById}
                                                          sectionName={currentSectionName ? currentSectionName : menuList[0] ? menuList[0].sectionName : ''}
                             />
                     }
@@ -153,9 +160,8 @@ function Main({
                                         onClick={() => getSectionData(1)}>next
                                 </button>
                             </div>
-                            {courseModalOpen ? <CourseAddModal toggle={toggle} addCourse={addCourse}
-                                                               getSectionData={getSectionData}/> : ""}
-                            {groupModalOpen ? <GroupAddModal toggle={toggle} getSectionData={getSectionData}/> : ""}
+                            {courseModalOpen && <CourseAddModal toggle={toggle} addCourse={addCourse} getSectionData={getSectionData}/>}
+                            {groupModalOpen && <GroupAddModal toggle={toggle} getSectionData={getSectionData}/>}
                         </div>
                     </div>
                 </Content>
@@ -170,4 +176,4 @@ export default connect(({data: {sectionData, menuList, pages, isNotAuthorization
         pages,
         isNotAuthorization
     }),
-    {getDataWithPage, getMenuList, addCourse, getMe})(Main);
+    {getDataWithPage, getMenuList, addCourse, getMe,deleteSectionItem})(Main);

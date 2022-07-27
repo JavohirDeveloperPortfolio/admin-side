@@ -62,5 +62,13 @@ export const addCourse = (data) => apiCall({
     data
 });
 
+export const deleteSectionItem = (section_name, elm_id) => apiCall({
+    url: '/section/' + section_name + '?id=' + elm_id,
+    method: 'DELETE',
+    onSuccess: slice.actions.onAddingData.type,
+    onFail: slice.actions.onFail.type,
+    headers: {Authorization: localStorage.getItem("access-token")},
+})
+
 
 export default slice.reducer
