@@ -61,7 +61,8 @@ function Groups({data, getSectionData, onSearch, toggleUpdate, deleteSectionItem
                                 color="primary"
                                 outline
                                 style={{
-                                    width: '14rem',
+                                    width: '20rem',
+                                    height: '14rem',
                                     cursor: 'pointer'
                                 }}
                             >

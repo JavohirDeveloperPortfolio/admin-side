@@ -3,7 +3,6 @@ import {useNavigate} from "react-router";
 import {connect} from "react-redux";
 import {toast} from "react-toastify";
 import {login, getMe} from "../../store/reducer/user";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import bgImage from '../../utils/img/bg-login2.jpg'
 import logo from '../../utils/img/logo.png'
 
