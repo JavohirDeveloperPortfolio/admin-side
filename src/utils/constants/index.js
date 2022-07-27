@@ -1,4 +1,4 @@
-const BACK_HOST = 'https://tesdytd.herokuapp.com'
+const BACK_HOST = 'https://oliy-mahad.herokuapp.com'
 const FRONT_HOST='localhost:3001'
 
 export const BASE_URL = `${BACK_HOST}`;
