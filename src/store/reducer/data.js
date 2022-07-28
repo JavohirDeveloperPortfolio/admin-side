@@ -62,8 +62,8 @@ export const addCourse = (data) => apiCall({
     data
 });
 
-export const deleteSectionItem = (section_name, elm_id) => apiCall({
-    url: '/section/' + section_name + '?id=' + elm_id,
+export const deleteSectionItem = (section_id, item_id) => apiCall({
+    url: '/section?section_id=' + section_id + '&item_id=' + item_id,
     method: 'DELETE',
     onSuccess: slice.actions.onAddingData.type,
     onFail: slice.actions.onFail.type,

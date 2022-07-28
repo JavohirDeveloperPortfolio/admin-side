@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router";
 import {Layout} from 'antd';
 import './main.css'
-import SectionTable from "../section/SectionTable";
+import SectionTable from "../sections/section/SectionTable";
 import Permission from "../settings/permission";
-import CourseAddModal from "../course/CourseAddModal";
-import GroupAddModal from "../group/GroupAddModal";
+import CourseAddModal from "../sections/course/CourseAddModal";
+import GroupAddModal from "../sections/group/GroupAddModal";
 import {connect} from "react-redux";
 import logo from '../../utils/img/logo.png'
 import {getMe} from "../../store/reducer/user";
@@ -68,7 +68,7 @@ function Main({
     }
 
     function deleteSectionItemById(item_id){
-        deleteSectionItem(currentSectionName,item_id)
+        deleteSectionItem(idForActiveMenu,item_id)
     }
 
 
@@ -140,7 +140,7 @@ function Main({
                 />
                 <Content>
                     {
-                        currentSectionName === 'permission' ? <Permission/> :
+                        currentSectionName.toLowerCase() === 'permission' ? <Permission/> :
                             sectionData && <SectionTable data={sectionData}
                                                          getSectionData={getSectionData}
                                                          toggle={toggle}
